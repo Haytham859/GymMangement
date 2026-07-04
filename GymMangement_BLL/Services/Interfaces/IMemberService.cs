@@ -10,6 +10,7 @@ namespace GymMangement_BLL.Services.Interfaces
         Task<IEnumerable<MemberDetailsDto>> GetAllMembersAsync(CancellationToken cancellationToken = default);
 
         Task<bool> CreateMemberAsync(CreateMemberDto model, CancellationToken cancellationToken = default);
+        Task<MemberDetailsDto?> GetMemberByIdAsync(int id, CancellationToken cancellationToken = default);
 
     }
 }

@@ -14,11 +14,14 @@ namespace GymMangement_BLL.Services.Classes
 
 
         private readonly IGenaricRepo<Member> _repo;
+        private readonly IGenaricRepo<MemberShip> _memberShipRepo;
+        private readonly IGenaricRepo<Plan> _planRepo;
 
-        public MemberService(IGenaricRepo<Member> repo)
+        public MemberService(IGenaricRepo<Member> repo, IGenaricRepo<MemberShip> memberShipRepo, IGenaricRepo<Plan> _planRepo)
         {
 
             _repo = repo;
+            _memberShipRepo = memberShipRepo;
         }
 
         public async Task<bool> CreateMemberAsync(CreateMemberDto model, CancellationToken cancellationToken = default)
@@ -94,11 +97,42 @@ namespace GymMangement_BLL.Services.Classes
                 Name = a.Name,
                 Id = a.Id,
                 Email = a.Email,
-                phone = a.Phone,
+                Phone = a.Phone,
                 Gender = a.Gender.Value,
             });
 
             return result;
+        }
+
+        public async Task<MemberDetailsDto?> GetMemberByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            var member = await _repo.GetByIdAsync(id, cancellationToken);
+
+            if (member == null)
+                return null;
+
+            var model = new MemberDetailsDto
+            {
+                Name = member.Name,
+                Phone = member.Phone,
+                DateOfBirth = member.DateOfBirth.ToShortDateString(),
+                Gender = member.Gender.Value,
+                Address = $"{member.Address.BuildingNumber} - {member.Address.Street} - {member.Address.City}"
+
+            };
+            var activeMember = await _memberShipRepo.FirstOrDefaultAsync(a => a.Id == id && a.EndDate > DateTime.Now);
+
+            if(activeMember is not null)
+            {
+                var activePlan = await _planRepo.GetByIdAsync(activeMember.Id, cancellationToken);
+
+                model.PlanName = activePlan.Name;
+                model.MemberShipStartDate = activeMember.CreatedAt.ToLongDateString();
+                model.MemberShipEndDate=activeMember.EndDate.ToLongDateString();
+
+                
+            }
+            return model;
         }
     }
 }

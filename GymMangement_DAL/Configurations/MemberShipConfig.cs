@@ -14,7 +14,7 @@ namespace GymMangement_DAL.Configurations
             builder.HasKey(a => a.Id);
 
 
-            builder.Property(a => a.StartsDate)
+            builder.Property(a => a.CreatedAt).HasColumnName("StartDate")
                 .HasDefaultValueSql("GETDATE()");
  
 

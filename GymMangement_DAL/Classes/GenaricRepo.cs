@@ -40,6 +40,14 @@ namespace GymMangement_DAL.Classes
 
         }
 
+        public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<TEntity> query = tracking ? _set : _set.AsNoTracking();
+
+return await query.FirstOrDefaultAsync(predicate);
+
+        }
+
         public async Task<IEnumerable<TEntity?>> GetAllAsync(bool track = true, CancellationToken cancellationToken = default)
         {
             IQueryable<TEntity> query = track ? _set : _set.AsNoTracking();

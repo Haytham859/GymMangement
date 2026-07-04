@@ -21,6 +21,8 @@ namespace GymMangement_DAL.Interfaces
         Task<int> UpdateAsync(TEntity entity);
         Task<bool> AnyAsync(Expression<Func<TEntity,bool>>predicate,CancellationToken cancellationToken=default);
 
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool tracking=false,CancellationToken cancellationToken = default);
+
 
 
 

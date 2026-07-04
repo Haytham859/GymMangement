@@ -4,10 +4,9 @@ using System.Text;
 
 namespace GymMangement_DAL.Models
 {
-    public class MemberShip
+    public class MemberShip:BaseEntity
     {
 
-        public int Id { get; set; }
         public Member Member { get; set; }
         public int MemberId {  get; set; }
 
@@ -15,7 +14,6 @@ namespace GymMangement_DAL.Models
         public int PlanId {  get; set; }
 
 
-        public DateTime StartsDate {  get; set; }
         public DateTime EndDate {  get; set; }
 
     }

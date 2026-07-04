@@ -56,6 +56,25 @@ namespace GymMangement_PL.Controllers
             
 
         }
+        public async Task<IActionResult> MemberDetails(int id, CancellationToken cancellationToken = default)
+        {
+
+            var member = await _memberService.GetMemberByIdAsync(id, cancellationToken);
+
+            if (member is null)
+            {
+                TempData["ErrorMessage"] = "Member Not Found";
+
+                
+                return RedirectToAction(nameof(Index));
+         
+       
+       
+            }
+
+            return View(member);
+        
+        }
 
 
 
